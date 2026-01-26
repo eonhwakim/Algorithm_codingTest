@@ -18,7 +18,7 @@ const filePath = process.platform === 'linux'
 // 입력값을 공백과 줄바꿈을 기준으로 모두 분리하여 숫자로 변환합니다.
 // 이렇게 하면 빈 줄이나 불규칙한 공백으로 인한 런타임 에러를 방지할 수 있습니다.
 const input = fs.readFileSync(filePath).toString().trim().split(/\s+/).map(Number);
-
+console.log(input);
 const N = input[0];
 const M = input[1];
 
