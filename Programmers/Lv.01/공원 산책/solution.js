@@ -1,40 +1,44 @@
 function solution(park, routes) {
-  // 방향 설정
-  const directions = {
-    E: [0, 1],
-    W: [0, -1],
-    S: [1, 0],
-    N: [-1, 0],
-  };
+  const directions = { E: [0, 1], W: [0, -1], S: [1, 0], N: [-1, 0] };
+  
+  const H = park.length;    // 공원의 세로 길이
+  const W = park[0].length; // 공원의 가로 길이
 
-  // 시작점 설정
-  let start = [0, 0];
-  for (let i = 0; i < park.length; i++) {
-    if (park[i].includes('S')) {
-      start = [i, park[i].indexOf('S')];
-      break;
-    }
-  }
+  // 1. 시작점(S) 찾기 (findIndex 활용)
+  let startX = park.findIndex(row => row.includes('S'));
+  let startY = park[startX].indexOf('S');
+  let [currentX, currentY] = [startX, startY];
 
-  for (let r of routes) {
-    let [dir, cnt] = r.split(' ');
+  // 2. 경로 이동
+  for (const route of routes) {
+    const [dir, distanceStr] = route.split(' ');
+    const distance = Number(distanceStr);
+    const [dx, dy] = directions[dir];
 
-    let [tempX, tempY] = start; // 현재 위치
-    let step = 0;
-    // r 이동하기 E 2-> 'x' 나오면 pass 하고 다음 루트로 이동
-    while (step < parseInt(cnt)) {
-      tempX += directions[dir][0];
-      tempY += directions[dir][1];
+    let tempX = currentX;
+    let tempY = currentY;
+    let canMove = true;
 
-      // 범위를 벗어나거나 'X' 이면 pass
-      if (tempX < 0 || tempX >= park.length || tempY < 0 || tempY >= park[0].length || park[tempX][tempY] === 'X')
+    // 한 칸씩 이동하며 확인
+    for (let step = 0; step < distance; step++) {
+      tempX += dx;
+      tempY += dy;
+
+      // 공원을 벗어나거나 장애물('X')을 만나면 이동 취소
+      if (tempX < 0 || tempX >= H || tempY < 0 || tempY >= W || park[tempX][tempY] === 'X') {
+        canMove = false;
         break;
-      // 이동한 위치가 'O' 이면 step 증가
-      step++;
+      }
     }
-    if (step === parseInt(cnt)) start = [tempX, tempY];
+
+    // 무사히 이동을 마쳤다면 현재 위치 업데이트
+    if (canMove) {
+      currentX = tempX;
+      currentY = tempY;
+    }
   }
-  return start;
+
+  return [currentX, currentY];
 }
 
 let parkData = ['SOO', 'OOO', 'OOO'];
