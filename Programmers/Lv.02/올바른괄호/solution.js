@@ -55,4 +55,25 @@ console.log(solution("(()(")); // false
 2. 조기 종료 (Early Return) :
    - count === 0 일 때 ) 가 나오면 더 볼 필요 없이 바로 false 를 반환하여 불필요한 연산을 줄입니다.
 이 방식은 시간 복잡도 O(N) , **공간 복잡도 O(1)**로 매우 효율적입니다.
+
+왜 숫자로 해도 되나요?
+- 스택에 들어가는 데이터가 모두 똑같은 ( 이기 때문입니다.
+- 넣는 행위는 count++, 빼는 행위는 count--로 완벽히 대체됩니다.
+- 이렇게 하면 배열 메모리를 쓰지 않아 공간 복잡도가 $O(1)$로 최적화됩니다.
  */
+
+//스택
+function solution(s){
+    let stack = [];
+    for(let i=0; i<s.length; i++){
+        if(s[i] === '('){
+            stack.push(s[i]);
+        }else{
+            if(stack.length === 0){
+                return false;
+            }
+            stack.pop();
+        }
+    }
+    return stack.length === 0;
+}
