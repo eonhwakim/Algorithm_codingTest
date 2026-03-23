@@ -1,22 +1,23 @@
 function solution(progresses, speeds) {
-  var answer = [0]; //stack 넣을 공간
+  const answer = [];
+  //남은 일수 배열만들기
+  let days = progresses.map((progress, index) => Math.ceil((100 - progress) / speeds[index]));
 
-  // 각각의 기능이 배포되는데 걸리는 시간을 구한다.
-  const releaseDays = progresses.map((progress, index) => Math.ceil((100 - progress) / speeds[index]));
-  // console.log('🍀', releaseDays); //[ 7, 3, 9 ]
-  
-  let max = releaseDays[0];
+  //첫번째 작업 기준으로 시작
+  let maxDay = days[0];
+  let count = 0; 
 
-  for(let i = 0; i < releaseDays.length; i++) {
-    if(releaseDays[i] <= max){
-      answer[answer.length - 1] += 1;
+  for(let i=0; i<days.length; i++){
+    if(days[i] <= maxDay){
+      count ++;
     }else{
-      max = releaseDays[i];
-      answer.push(1);
+      answer.push(count);
+      maxDay = days[i];
+      count = 1;
     }
   }
-  console.log('🍀', answer);
-  return answer; 
+  answer.push(count);
+  return answer;
 }
 
-solution([93, 30, 55], [1, 30, 5])
+console.log(solution([93, 30, 55], [1, 30, 5]))
